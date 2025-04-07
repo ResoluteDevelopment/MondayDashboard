@@ -75,6 +75,7 @@ applyColumnFilter(column: string, value: string) {
 
   constructor() {
     this.itemService.getWorkspaces().subscribe((workspaces: any[]) => {
+      console.log(workspaces); // Log the workspaces to the console
       // Filter workspaces to only include those starting with "ACTIVE"
       const activeWorkspaces = workspaces.filter((workspace: any) =>
         workspace.name.startsWith('ACTIVE')

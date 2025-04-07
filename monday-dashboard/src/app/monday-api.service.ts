@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { concatMap, map, reduce } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class MondayApiService {
       .watchQuery({
         query: gql`
           query {
-            workspaces{
+            workspaces(limit: 1000){
               id
               name
             }
@@ -59,34 +59,41 @@ export class MondayApiService {
   } 
 
   getTasksByBoardIds(boardIds: string[]): Observable<any> {
-    return this.apollo
-      .query({
+    // Helper function to create a query for a specific status
+    const createQuery = (status: string) =>
+      this.apollo.query({
         query: gql`
           query {
             boards (ids: ["${boardIds.join('", "')}"]) {
-              items_page (limit: 100, query_params: {rules: [{column_id: "status", compare_value: ["Working on it"], operator:contains_terms}]}) {
+              items_page (limit: 100, query_params: {rules: [{column_id: "status", compare_value: ["${status}"], operator:contains_terms}]}) {
                 cursor
-                  items {
-                    id 
-                    name 
-                    column_values {
-                        id
-                        text
-                        value
-                    }
+                items {
+                  id 
+                  name 
+                  column_values {
+                    id
+                    text
+                    value
                   }
                 }
-              } 
+              }
             }
-          `,
+          }
+        `,
         context: {
           uri: this.fullUrl,
         },
-      })
-      .pipe(
+      });
+
+      // Create an array of queries for the statuses
+      const statuses = ['Working on it', 'This Week'];
+      const queries = statuses.map((status) => createQuery(status));
+
+      return from(queries).pipe(
+        concatMap((query) => query), // Execute each query sequentially
         map((result: any) => {
-          // Restructure the items to include the board ID and flatten column_values
-          return result.data.boards.flatMap((board: any) =>
+          // Flatten and process the results
+          return result.data.boards.flatMap((board: any) => 
             board.items_page.items.map((item: any) => {
               const flattenedColumns = item.column_values.reduce((acc: any, column: any) => {
                 acc[column.id] = column.text || column.value; // Use text or value
@@ -100,7 +107,12 @@ export class MondayApiService {
               };
             })
           );
+        }),
+        reduce<any[], any[]>((allTasks, currentTasks) => [...allTasks, ...currentTasks], []), // Combine all results into a single array
+        map((tasks: any[]) => {
+          // Filter out tasks where the person is blank
+          return tasks.filter((task: any) => task.person && task.person.trim() !== '');
         })
       );
-  }
+    }
 }
