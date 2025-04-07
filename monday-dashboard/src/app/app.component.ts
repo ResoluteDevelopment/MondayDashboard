@@ -118,10 +118,10 @@ applyColumnFilter(column: string, value: string) {
           
           this.dataSource.data = this.tasks;
           // Populate unique values for dropdowns
-          this.uniqueBoardNames = [...new Set(this.tasks.map((task) => task.boardName))];
+          this.uniqueBoardNames = [...new Set(this.tasks.map((task) => task.boardName))].sort((a, b) => (a > b) ? 1 : -1);
           this.uniqueTaskNames = [...new Set(this.tasks.map((task) => task.taskName))];
           this.uniqueStatuses = [...new Set(this.tasks.map((task) => task.status))];
-          this.uniquePersons = [...new Set(this.tasks.map((task) => task.person))];
+          this.uniquePersons = [...new Set(this.tasks.map((task) => task.person))].sort((a, b) => (a > b) ? 1 : -1);;
 
           console.log(this.uniqueBoardNames);
 
