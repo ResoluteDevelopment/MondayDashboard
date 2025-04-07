@@ -8,7 +8,6 @@ import { concatMap, map, reduce } from 'rxjs/operators';
 })
 export class MondayApiService {
   private PATH = "";
-  // private HOST = "https://eo1xwvev9cigdv8.m.pipedream.net";
   private HOST = "https://api.monday.com/v2/";
   private fullUrl = this.HOST + this.PATH;
 
