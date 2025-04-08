@@ -38,7 +38,7 @@ jobs:
         context: ./monday-dashboard
         file: ./monday-dashboard/dockerfile
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: latest
         labels: ${{ steps.meta.outputs.labels }}
     # - name: Build the Docker image
     #   working-directory: ./monday-dashboard
