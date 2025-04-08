@@ -159,7 +159,7 @@
         <div style="display: inline-block; padding: 5px; width: 45%;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Person</mat-label>
-            <mat-select (selectionChange)="applyColumnFilter('person', $event.value)">
+            <mat-select [(value)]="selectedPerson" (selectionChange)="applyColumnFilter('person', $event.value)">
               <mat-option *ngFor="let person of uniquePersons" [value]="person">
                 {{ person }}
               </mat-option>
@@ -195,7 +195,15 @@
           <!-- Person Column -->
           <ng-container matColumnDef="person">
             <th mat-header-cell *matHeaderCellDef mat-sort-header="person">Person</th>
-            <td mat-cell *matCellDef="let element">{{ element.person }}</td>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="person-pill"
+                [ngClass]="getPersonClass(element.person)"
+                (click)="applyColumnFilter('person', element.person)"
+              >
+                {{ element.person }}
+              </span>
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

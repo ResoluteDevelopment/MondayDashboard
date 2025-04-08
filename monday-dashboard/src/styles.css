@@ -1,19 +1,93 @@
+/* General body styling */
 body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f4f4f4; 
-  color: #002855; 
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Roboto', sans-serif;
-  color: #002855;
-}
-
-a {
-  color: #0071CE;
-  text-decoration: none;
-
-  &:hover {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4; /* Light gray background */
+    color: #002855; /* Dark blue text */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+    color: #002855; /* Dark blue */
+    margin: 0 0 1rem 0;
+  }
+  
+  /* Links */
+  a {
+    color: #0071CE; /* Light blue */
+    text-decoration: none;
+  }
+  
+  a:hover {
     text-decoration: underline;
   }
-}
+  
+  /* Buttons */
+  button {
+    background-color: #002855; /* Dark blue */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056A3; /* Slightly lighter blue */
+  }
+  
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 1rem;
+    text-align: left;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  th, td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #002855; /* Dark blue */
+    color: white;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f4f4f4; /* Light gray for alternating rows */
+  }
+  
+  tr:hover {
+    background-color: #e0e0e0; /* Slightly darker gray on hover */
+  }
+  
+  /* Table header row */
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  /* Table footer */
+  tfoot {
+    background-color: #002855; /* Dark blue */
+    color: white;
+    font-weight: bold;
+  }
+
+/* Reduce the height of table rows */
+table th, table td {
+    padding: 0.2rem 0.45rem; /* Reduce padding */
+    line-height: 1.2; /* Adjust line height for a more compact look */
+  }
+
+  

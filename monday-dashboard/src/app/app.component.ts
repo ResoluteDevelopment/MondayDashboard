@@ -33,6 +33,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class AppComponent {
   title = 'monday-dashboard';
+  selectedPerson: string = '';
 
   private itemService = inject(MondayApiService);
   //Prepare Data Table
@@ -43,6 +44,38 @@ export class AppComponent {
 
 ngAfterViewInit() {
   this.dataSource.paginator = this.paginator;
+}
+// Predefined number of color classes
+private colorClasses = 10;
+
+// Map to store assigned colors for each person
+private personColorMap: { [key: string]: string } = {};
+
+// Method to assign a color class based on the person's name
+getPersonClass(person: string): string {
+ 
+  if (!person) {
+    return 'person-color-default'; // Default color for empty or undefined names
+  }
+
+  // Check if the person already has an assigned color
+  if (!this.personColorMap[person]) {
+    const hash = this.hashString(person);
+    const colorIndex = hash % this.colorClasses; // Map hash to a color class
+    this.personColorMap[person] = `person-color-${colorIndex}`;
+  }
+
+  return this.personColorMap[person];
+}
+
+// Simple hash function to generate a numeric hash from a string
+private hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
 }
 
 applyGlobalFilter(event: Event) {
@@ -61,6 +94,9 @@ applyColumnFilter(column: string, value: string) {
   const currentFilter = this.dataSource.filter ? JSON.parse(this.dataSource.filter) : {};
   currentFilter[column] = value;
   this.dataSource.filter = JSON.stringify(currentFilter);
+  if (column === 'person') {
+    this.selectedPerson = value;
+  }
 }
 
   //Create data objects

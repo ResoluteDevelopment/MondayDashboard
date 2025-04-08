@@ -1,0 +1,79 @@
+/* Person pills */
+.person-pill {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: normal;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    background-color: #0071CE; /* Default light blue */
+    transition: background-color 0.3s ease;
+  }
+  
+  .person-pill:hover {
+    background-color: #0056A3; /* Slightly darker blue on hover */
+    color: white;
+  }
+  
+  .person-pill.active {
+    background-color: #002855; /* Dark blue for active filter */
+  }
+
+
+/* Dynamic person color styles */
+.person-color-0 {
+  background-color: #FFD700; /* Gold */
+  color: #000; /* Black text */
+}
+
+.person-color-1 {
+  background-color: #87CEEB; /* Sky Blue */
+  color: #000; /* Black text */
+}
+
+.person-color-2 {
+  background-color: #90EE90; /* Light Green */
+  color: #000; /* Black text */
+}
+
+.person-color-3 {
+  background-color: #FFB6C1; /* Light Pink */
+  color: #000; /* Black text */
+}
+
+.person-color-4 {
+  background-color: #FFA500; /* Orange */
+  color: #000; /* Black text */
+}
+
+.person-color-5 {
+  background-color: #9370DB; /* Medium Purple */
+  color: #FFF; /* White text */
+}
+
+.person-color-6 {
+  background-color: #FF6347; /* Tomato */
+  color: #FFF; /* White text */
+}
+
+.person-color-7 {
+  background-color: #4682B4; /* Steel Blue */
+  color: #FFF; /* White text */
+}
+
+.person-color-8 {
+  background-color: #32CD32; /* Lime Green */
+  color: #FFF; /* White text */
+}
+
+.person-color-9 {
+  background-color: #8B0000; /* Dark Red */
+  color: #FFF; /* White text */
+}
+
+.person-color-default {
+  background-color: #E0E0E0; /* Light Gray */
+  color: #000; /* Black text */
+}
