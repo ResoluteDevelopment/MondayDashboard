@@ -1,5 +1,6 @@
 name: Docker Image CI
-
+with:
+  context: .
 on:
   push:
     branches: [ "main" ]
@@ -9,7 +10,6 @@ on:
 jobs:
 
   build:
-    context: ..
     runs-on: ubuntu-latest
 
     steps:
