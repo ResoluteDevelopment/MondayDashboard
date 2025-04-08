@@ -50,22 +50,22 @@ body {
     border: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+    
   th, td {
     padding: 0.75rem 1rem;
     border: 1px solid #ddd;
+    color: #002855; /* Dark blue font color for both headers and rows */
   }
-  
+
   th {
-    background-color: #002855; /* Dark blue */
-    color: white;
+    background-color: #f4f4f4; /* Light gray background for headers */
     font-weight: bold;
   }
-  
+
   tr:nth-child(even) {
-    background-color: #f4f4f4; /* Light gray for alternating rows */
+    background-color: #f9f9f9; /* Slightly lighter gray for alternating rows */
   }
-  
+
   tr:hover {
     background-color: #e0e0e0; /* Slightly darker gray on hover */
   }
