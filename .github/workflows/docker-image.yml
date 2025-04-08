@@ -9,10 +9,10 @@ on:
 jobs:
 
   build:
-
+    context: ..
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --tag rdetlaff/monday-dashboard:$(date +%s)
+      run: docker build . --file dockerfile --tag rdetlaff/monday-dashboard:$(date +%s)
