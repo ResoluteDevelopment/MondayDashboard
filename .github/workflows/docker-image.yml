@@ -13,6 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Build App
+      working-directory: ./monday-dashboard
+      run: npm install && npm run build
     - name: Build the Docker image
       working-directory: ./monday-dashboard
       run: docker build . --file dockerfile --tag rdetlaff/monday-dashboard:$(date +%s)
