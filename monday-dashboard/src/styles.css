@@ -1,4 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f4; 
+  color: #002855; 
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  color: #002855;
+}
+
+a {
+  color: #0071CE;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -53,7 +53,11 @@ export class MondayApiService {
         return result.data.boards.filter(
           (board: any) =>
             board.name.includes("Tasks") && !board.name.toLowerCase().includes("subitems")
-        );
+        )
+        .map((board: any) => ({
+          ...board,
+          name: board.name.replace(/ Tasks$/i, ''), // Trim " Tasks" from the end of the name
+        }));
       }));
   } 
 
