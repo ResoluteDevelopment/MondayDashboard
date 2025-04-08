@@ -1,6 +1,5 @@
 name: Docker Image CI
-with:
-  context: .
+
 on:
   push:
     branches: [ "main" ]
@@ -15,4 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
+      with:
+        context: .
       run: docker build . --file dockerfile --tag rdetlaff/monday-dashboard:$(date +%s)
