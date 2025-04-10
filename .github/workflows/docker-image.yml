@@ -40,8 +40,5 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    # - name: Build the Docker image
-    #   working-directory: ./monday-dashboard
-    #   run: docker build . --file dockerfile --tag rdetlaff/monday-dashboard:$(date +%s)
 
       

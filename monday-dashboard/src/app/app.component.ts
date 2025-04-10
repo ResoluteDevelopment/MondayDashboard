@@ -160,7 +160,7 @@ applyColumnFilter(column: string, value: string) {
           this.uniqueStatuses = [...new Set(this.tasks.map((task) => task.status))];
           this.uniquePersons = [...new Set(this.tasks.map((task) => task.person))].sort((a, b) => (a > b) ? 1 : -1);;
 
-          console.log(this.uniqueBoardNames);
+          console.log(this.boards);
 
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;

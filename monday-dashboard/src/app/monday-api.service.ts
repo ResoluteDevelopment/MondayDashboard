@@ -57,6 +57,7 @@ export class MondayApiService {
         .map((board: any) => ({
           ...board,
           name: board.name.replace(/ Tasks$/i, ''), // Trim " Tasks" from the end of the name
+          url: `https://resolutecommercial-company.monday.com/boards/${board.id}` // Add URL property
         }));
       }));
   } 
