@@ -177,13 +177,17 @@
           <!-- Board Name Column -->
           <ng-container matColumnDef="boardName">
             <th mat-header-cell *matHeaderCellDef mat-sort-header="boardName">Project</th>
-            <td mat-cell *matCellDef="let element"><a href="https://resolutecommercial-company.monday.com/boards/{{ element.boardId }}" target="_blank">{{ element.boardName }}</a></td>
+            <td mat-cell *matCellDef="let element">
+              <a href="https://resolutecommercial-company.monday.com/boards/{{ element.boardId }}" target="_blank">{{ element.boardName }}</a>
+            </td>
           </ng-container>
 
           <!-- Task Name Column -->
           <ng-container matColumnDef="taskName">
             <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Task Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            <td mat-cell *matCellDef="let element">
+              <a href="https://resolutecommercial-company.monday.com/boards/{{ element.boardId }}/pulses/{{ element.id }}" target="_blank">{{ element.name }}</a>
+            </td>
           </ng-container>
 
           <!-- Status Column -->
