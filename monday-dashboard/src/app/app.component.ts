@@ -139,7 +139,6 @@ applyColumnFilter(column: string, value: string) {
         );
 
         // Consolidate all task results into one list
-        // Consolidate all task results into one list
         forkJoin(taskRequests).subscribe((taskResults: any[]) => {
           const allTasks = taskResults.flat(); // Flatten the array of arrays into a single list
 
@@ -160,7 +159,7 @@ applyColumnFilter(column: string, value: string) {
           this.uniqueStatuses = [...new Set(this.tasks.map((task) => task.status))];
           this.uniquePersons = [...new Set(this.tasks.map((task) => task.person))].sort((a, b) => (a > b) ? 1 : -1);;
 
-          console.log(this.boards);
+          console.log(this.tasks);
 
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;

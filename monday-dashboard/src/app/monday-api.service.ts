@@ -13,7 +13,9 @@ export class MondayApiService {
 
   private apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjM5MDQzMjU4OSwiYWFpIjoxMSwidWlkIjo2MTc1NTg0NSwiaWFkIjoiMjAyNC0wNy0yOVQyMTozNjozNC4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjM3OTc4MzIsInJnbiI6InVzZTEifQ.u62SRK3B6vt3ody_dPk-0QFKXXCEHDRuZb-R4CFZ_2M';
 
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo) {
+    
+   }
 
   getWorkspaces(): Observable<any> {
     return this.apollo
@@ -63,6 +65,7 @@ export class MondayApiService {
   } 
 
   getTasksByBoardIds(boardIds: string[]): Observable<any> {
+
     // Helper function to create a query for a specific status
     const createQuery = (status: string) =>
       this.apollo.query({
@@ -93,22 +96,22 @@ export class MondayApiService {
       const statuses = ['Working on it', 'This Week'];
       const queries = statuses.map((status) => createQuery(status));
 
+      // Process the queries sequentially using concatMap
       return from(queries).pipe(
         concatMap((query) => query), // Execute each query sequentially
         map((result: any) => {
           // Flatten and process the results
-          return result.data.boards.flatMap((board: any) => 
-            board.items_page.items.map((item: any) => {
-              const flattenedColumns = item.column_values.reduce((acc: any, column: any) => {
-                acc[column.id] = column.text || column.value; // Use text or value
-                return acc;
-              }, {});
-              return {
-                boardId: boardIds[0], // Include the board ID
+          return result.data.boards.flatMap((board: any) =>
+            board.items_page.items.flatMap((item: any) => {
+              const persons = (item.column_values.find((col: any) => col.id === 'person')?.text || '').split(',').map((p: string) => p.trim());
+              const status = item.column_values.find((col: any) => col.id === 'status')?.text || '';
+              return persons.map((person: string) => ({
+                boardId: boardIds[0], // Use the correct board ID
                 id: item.id,
                 name: item.name,
-                ...flattenedColumns, // Spread the flattened column values
-              };
+                person, // Assign each person to a separate task
+                status,
+              }));
             })
           );
         }),
@@ -119,4 +122,35 @@ export class MondayApiService {
         })
       );
     }
+
+    getTasksByBoardId(boardId: string): Observable<any> {
+
+      // Helper function to create a query for a specific status
+      return this.apollo.query({
+          query: gql`
+            query {
+              boards (ids: ["${boardId}"]) {
+                items_page (limit: 100, query_params: {rules: [{column_id: "status", compare_value: ["This Week"], operator:contains_terms}]}) {
+                  cursor
+                  items {
+                    id 
+                    name 
+                    column_values {
+                      id
+                      text
+                      value
+                    }
+                  }
+                }
+              }
+            }
+          `,
+          context: {
+            uri: this.fullUrl,
+          },
+        }).pipe(map((result: any) => {
+          return result.data.boards;
+        }));
+  
+      }
 }
