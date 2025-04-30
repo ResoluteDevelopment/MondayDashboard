@@ -36,7 +36,7 @@ export class AppComponent {
   selectedPerson: string = '';
 
   private itemService = inject(MondayApiService);
-  //Prepare Data Table
+  //Prepare Task Data Table
   displayedColumns: string[] = ['boardName', 'taskName', 'status', 'person'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatSort) sort!: MatSort;
