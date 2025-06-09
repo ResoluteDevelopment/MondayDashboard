@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { from, Observable } from 'rxjs';
-import { concatMap, map, reduce } from 'rxjs/operators';
+import { mergeMap, map, reduce } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,9 @@ export class MondayApiService {
   private fullUrl = this.HOST + this.PATH;
 
   private apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjM5MDQzMjU4OSwiYWFpIjoxMSwidWlkIjo2MTc1NTg0NSwiaWFkIjoiMjAyNC0wNy0yOVQyMTozNjozNC4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjM3OTc4MzIsInJnbiI6InVzZTEifQ.u62SRK3B6vt3ody_dPk-0QFKXXCEHDRuZb-R4CFZ_2M';
+
+  //Limit the number of concurrent requests (e.g. 5 at a time)
+  private static readonly MAX_CONCURRENT = 1;
 
   constructor(private apollo: Apollo) {
     
@@ -96,9 +99,11 @@ export class MondayApiService {
       const statuses = ['Working on it', 'This Week'];
       const queries = statuses.map((status) => createQuery(status));
 
+      
+
       // Process the queries sequentially using concatMap
       return from(queries).pipe(
-        concatMap((query) => query), // Execute each query sequentially
+        mergeMap((query) => query, MondayApiService.MAX_CONCURRENT), // Execute each query sequentially
         map((result: any) => {
           // Flatten and process the results
           return result.data.boards.flatMap((board: any) =>
@@ -126,7 +131,8 @@ export class MondayApiService {
     getTasksByBoardId(boardId: string): Observable<any> {
 
       // Helper function to create a query for a specific status
-      return this.apollo.query({
+      return from([
+        this.apollo.query({
           query: gql`
             query {
               boards (ids: ["${boardId}"]) {
@@ -150,7 +156,11 @@ export class MondayApiService {
           },
         }).pipe(map((result: any) => {
           return result.data.boards;
-        }));
+        })
+      )
+    ]).pipe(
+      mergeMap(obs$ => obs$, MondayApiService.MAX_CONCURRENT), // Execute each query sequentially
+    );
   
       }
 }

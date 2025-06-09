@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MondayApiService } from './monday-api.service';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { forkJoin, from } from 'rxjs';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 
 //Angular Material Table
 import { MatTableDataSource } from '@angular/material/table';
@@ -138,12 +138,16 @@ applyColumnFilter(column: string, value: string) {
           this.itemService.getTasksByBoardIds([id])
         );
 
+
         // Consolidate all task results into one list
-        forkJoin(taskRequests).subscribe((taskResults: any[]) => {
+        from(taskRequests).pipe(
+          mergeMap(task$ => task$, 20), // Limit to 3 concurrent requests
+          toArray()
+        ).subscribe((taskResults: any[]) => {
           const allTasks = taskResults.flat(); // Flatten the array of arrays into a single list
 
-          // Group tasks by board and structure the result
-          // Add the board name to each task
+          //Group tasks by board and structure the result
+          //Add the board name to each task
           this.tasks = allTasks.map((task: any) => {
             const board = this.boards.find((b: any) => b.id === task.boardId);
             return {
