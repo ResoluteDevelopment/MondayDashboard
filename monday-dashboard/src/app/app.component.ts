@@ -114,7 +114,7 @@ applyColumnFilter(column: string, value: string) {
       
       // Filter workspaces to only include those starting with "ACTIVE"
       const activeWorkspaces = workspaces.filter((workspace: any) =>
-        workspace.name.startsWith('ACTIVE')
+        workspace.name.startsWith('ACTIVE') || workspace.name.includes('RESOLUTE REAL ESTATE')
       );
       this.workspaces = activeWorkspaces; // Store the filtered workspaces
 
@@ -152,13 +152,13 @@ applyColumnFilter(column: string, value: string) {
             const board = this.boards.find((b: any) => b.id === task.boardId);
             return {
               ...task,
-              boardName: board ? board.name : null, // Attach the board name
+              boardName: task.property ? task.property : board ? board.name : null, // Attach the board name
             };
           });
           
           this.dataSource.data = this.tasks;
           // Populate unique values for dropdowns
-          this.uniqueBoardNames = [...new Set(this.tasks.map((task) => task.boardName))].sort((a, b) => (a > b) ? 1 : -1);
+          this.uniqueBoardNames = [...new Set(this.tasks.map((task) => task.property ? task.property : task.boardName))].sort((a, b) => (a > b) ? 1 : -1);
           this.uniqueTaskNames = [...new Set(this.tasks.map((task) => task.taskName))];
           this.uniqueStatuses = [...new Set(this.tasks.map((task) => task.status))];
           this.uniquePersons = [...new Set(this.tasks.map((task) => task.person))].sort((a, b) => (a > b) ? 1 : -1);;

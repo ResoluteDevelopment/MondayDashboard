@@ -57,7 +57,7 @@ export class MondayApiService {
         // Filter boards to only include those with "Tasks" in the name
         return result.data.boards.filter(
           (board: any) =>
-            board.name.includes("Tasks") && !board.name.toLowerCase().includes("subitems")
+            (board.name.includes("Tasks") || board.name.includes("TO DO LIST")) && !board.name.toLowerCase().includes("subitems")
         )
         .map((board: any) => ({
           ...board,
@@ -68,6 +68,14 @@ export class MondayApiService {
   } 
 
   getTasksByBoardIds(boardIds: string[]): Observable<any> {
+    var status_col = 'status';
+    var person_col = 'person';
+  
+    if (boardIds[0] === '8132367671') {
+      status_col = 'status_mkkqfew0';
+      person_col = 'people_mkkqkc3e';
+    }
+
 
     // Helper function to create a query for a specific status
     const createQuery = (status: string) =>
@@ -75,7 +83,7 @@ export class MondayApiService {
         query: gql`
           query {
             boards (ids: ["${boardIds.join('", "')}"]) {
-              items_page (limit: 100, query_params: {rules: [{column_id: "status", compare_value: ["${status}"], operator:contains_terms}]}) {
+              items_page (limit: 100, query_params: {rules: [{column_id: "${status_col}", compare_value: ["${status}"], operator:contains_terms}]}) {
                 cursor
                 items {
                   id 
@@ -108,14 +116,15 @@ export class MondayApiService {
           // Flatten and process the results
           return result.data.boards.flatMap((board: any) =>
             board.items_page.items.flatMap((item: any) => {
-              const persons = (item.column_values.find((col: any) => col.id === 'person')?.text || '').split(',').map((p: string) => p.trim());
-              const status = item.column_values.find((col: any) => col.id === 'status')?.text || '';
+              const persons = (item.column_values.find((col: any) => col.id === person_col)?.text || '').split(',').map((p: string) => p.trim());
+              const status = item.column_values.find((col: any) => col.id === status_col)?.text || '';
               return persons.map((person: string) => ({
                 boardId: boardIds[0], // Use the correct board ID
                 id: item.id,
                 name: item.name,
                 person, // Assign each person to a separate task
                 status,
+                property: item.column_values.find((col: any) => col.id === 'property_mkkqqnwr')?.text || '',
               }));
             })
           );
