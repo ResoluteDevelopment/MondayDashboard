@@ -148,10 +148,10 @@
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Project</mat-label>
             <mat-select (selectionChange)="applyColumnFilter('boardName', $event.value)">
+              <mat-option [value]="">All</mat-option>
               <mat-option *ngFor="let board of uniqueBoardNames" [value]="board">
                 {{ board }}
               </mat-option>
-              <mat-option [value]="">All</mat-option>
             </mat-select>
           </mat-form-field>
        </div>  
@@ -160,10 +160,10 @@
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Person</mat-label>
             <mat-select [(value)]="selectedPerson" (selectionChange)="applyColumnFilter('person', $event.value)">
+              <mat-option [value]="">All</mat-option>
               <mat-option *ngFor="let person of uniquePersons" [value]="person">
                 {{ person }}
               </mat-option>
-              <mat-option [value]="">All</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
