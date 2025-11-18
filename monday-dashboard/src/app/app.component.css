@@ -77,3 +77,32 @@
   background-color: #E0E0E0; /* Light Gray */
   color: #000; /* Black text */
 }
+
+/* Status dropdown styling - clean and compact */
+.status-dropdown {
+  width: 100%;
+  min-width: 120px;
+  font-size: 0.9rem;
+  border: none;
+  background: transparent;
+}
+
+/* Remove underline from mat-select */
+::ng-deep .status-dropdown .mat-mdc-select-trigger {
+  border: none !important;
+}
+
+::ng-deep .status-dropdown .mat-mdc-select-value {
+  padding: 2px 4px;
+}
+
+/* Reduce dropdown arrow size */
+::ng-deep .status-dropdown .mat-mdc-select-arrow-wrapper {
+  height: 16px;
+  padding-left: 4px;
+}
+
+/* Panel styling */
+::ng-deep .status-dropdown-panel {
+  margin-top: 8px;
+}

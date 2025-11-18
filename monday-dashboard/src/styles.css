@@ -86,8 +86,22 @@ body {
 
 /* Reduce the height of table rows */
 table th, table td {
-    padding: 0.2rem 0.45rem; /* Reduce padding */
-    line-height: 1.2; /* Adjust line height for a more compact look */
+    padding: 0.1rem 0.3rem; /* Further reduced padding for compact display */
+    line-height: 1.1; /* Tighter line height */
+  }
+
+/* Compact expansion panels */
+::ng-deep .mat-expansion-panel-body {
+    padding: 8px 16px 16px !important; /* Reduced from default 16px all around */
+  }
+
+::ng-deep .mat-expansion-panel-header {
+    padding: 0 16px !important;
+    height: 48px !important; /* Reduced from default 64px */
+  }
+
+::ng-deep .mat-expansion-panel {
+    margin-bottom: 8px !important; /* Reduced spacing between panels */
   }
 
   
