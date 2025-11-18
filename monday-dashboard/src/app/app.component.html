@@ -138,13 +138,19 @@
 <main class="main">
   
   <div class="content" style="max-width: 1100px!important;">
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%">
+    <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%">
       
       <h1>Tasks</h1>
-      
-      <div>
+
+      <!-- View Toggle -->
+      <mat-button-toggle-group [value]="currentView" (change)="onViewChange($event)" style="margin-bottom: 0.5rem;">
+        <mat-button-toggle value="active">Active Tasks</mat-button-toggle>
+        <mat-button-toggle value="completed">Completed Tasks</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div style="margin-bottom: 0.5rem;">
         <!-- Board Name Filter -->
-        <div style="display: inline-block; padding: 5px; width: 30%;">
+        <div style="display: inline-block; padding: 2px; width: 30%;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Project</mat-label>
             <mat-select (selectionChange)="applyColumnFilter('boardName', $event.value)">
@@ -156,7 +162,7 @@
           </mat-form-field>
        </div>
         <!-- Person Filter -->
-        <div style="display: inline-block; padding: 5px; width: 30%;">
+        <div style="display: inline-block; padding: 2px; width: 30%;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Person</mat-label>
             <mat-select [(value)]="selectedPerson" (selectionChange)="applyColumnFilter('person', $event.value)">
@@ -168,7 +174,7 @@
           </mat-form-field>
         </div>
         <!-- Status Filter (Multi-Select) -->
-        <div style="display: inline-block; padding: 5px; width: 30%;">
+        <div style="display: inline-block; padding: 2px; width: 30%;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Status</mat-label>
             <mat-select [(value)]="selectedStatuses" multiple (selectionChange)="applyStatusFilter($event.value)">
@@ -183,7 +189,7 @@
     
       <div class="grouped-container">
         <mat-accordion multi>
-          <mat-expansion-panel *ngFor="let group of groupedTasks" [expanded]="true">
+          <mat-expansion-panel *ngFor="let group of visibleGroupedTasks" [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <a href="https://resolutecommercial-company.monday.com/boards/{{ group.boardId }}" target="_blank" (click)="$event.stopPropagation()" style="text-decoration: none; color: inherit; font-weight: 500;">
@@ -212,13 +218,17 @@
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
                 <td mat-cell *matCellDef="let element">
-                  <mat-form-field appearance="outline" style="width: 100%; min-width: 150px;" *ngIf="boardStatusOptions[element.boardId]">
-                    <mat-select [(value)]="element.status" (selectionChange)="updateTaskStatus(element, $event.value)">
-                      <mat-option *ngFor="let option of boardStatusOptions[element.boardId]" [value]="option.label">
-                        {{ option.label }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <mat-select
+                    *ngIf="boardStatusOptions[element.boardId]"
+                    [(value)]="element.status"
+                    (selectionChange)="updateTaskStatus(element, $event.value)"
+                    class="status-dropdown"
+                    disableOptionCentering
+                    panelClass="status-dropdown-panel">
+                    <mat-option *ngFor="let option of boardStatusOptions[element.boardId]" [value]="option.label">
+                      {{ option.label }}
+                    </mat-option>
+                  </mat-select>
                   <span *ngIf="!boardStatusOptions[element.boardId]">{{ element.status }}</span>
                 </td>
               </ng-container>

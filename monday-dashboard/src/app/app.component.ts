@@ -16,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-root',
@@ -29,12 +30,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatFormFieldModule,
     MatInputModule,
     MatExpansionModule,
+    MatButtonToggleModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'monday-dashboard';
+  currentView: 'active' | 'completed' = 'active'; // View toggle
   selectedPerson: string = '';
   selectedStatuses: string[] = ['Working on it', 'This Week']; // Default status filter
 
@@ -146,6 +149,41 @@ applyStatusFilter(statuses: string[]) {
   });
 }
 
+// Handle view toggle change event
+onViewChange(event: any) {
+  const view = event.value as 'active' | 'completed';
+  this.switchView(view);
+}
+
+// Switch between active and completed views
+switchView(view: 'active' | 'completed') {
+  this.currentView = view;
+
+  if (view === 'active') {
+    // Show active tasks
+    this.selectedStatuses = ['Working on it', 'This Week'];
+  } else {
+    // Show completed tasks - check for common completion status names
+    const completedStatuses = this.uniqueStatuses.filter(status =>
+      status.toLowerCase().includes('done') ||
+      status.toLowerCase().includes('complete') ||
+      status.toLowerCase().includes('finished') ||
+      status.toLowerCase().includes('closed')
+    );
+
+    // If no completion statuses found, default to 'Done'
+    this.selectedStatuses = completedStatuses.length > 0 ? completedStatuses : ['Done'];
+  }
+
+  // Apply the new status filter
+  this.applyStatusFilter(this.selectedStatuses);
+}
+
+// Get groups that have tasks (after filtering)
+get visibleGroupedTasks() {
+  return this.groupedTasks.filter(group => group.dataSource.filteredData.length > 0);
+}
+
   //Create data objects
   workspaces: any[] = [];
   boards: any[] = [];
@@ -254,15 +292,11 @@ applyStatusFilter(statuses: string[]) {
     this.itemService.getWorkspaces().subscribe((workspaces: any[]) => {
       console.log('All workspaces fetched:', workspaces.map(w => w.name));
 
-      // Filter workspaces to only include those starting with "ACTIVE"
-      const activeWorkspaces = workspaces.filter((workspace: any) =>
-        workspace.name.startsWith('ACTIVE') || workspace.name.includes('RESOLUTE REAL ESTATE')
-      );
-      console.log('Filtered active workspaces:', activeWorkspaces.map(w => w.name));
-      this.workspaces = activeWorkspaces; // Store the filtered workspaces
+      // Use all workspaces (no filtering to ensure CCTL and other boards appear)
+      this.workspaces = workspaces; // Store all workspaces
 
       // Extract workspace IDs and wrap them in double quotes
-      const workspaceIds = activeWorkspaces.map((workspace: any) => `"${workspace.id}"`);
+      const workspaceIds = workspaces.map((workspace: any) => `"${workspace.id}"`);
 
       // Fetch boards for each workspace ID
       const boardRequests = workspaceIds.map((id: string) =>
