@@ -142,15 +142,9 @@
       
       <h1>Tasks</h1>
 
-      <!-- View Toggle -->
-      <mat-button-toggle-group [value]="currentView" (change)="onViewChange($event)" style="margin-bottom: 0.5rem;">
-        <mat-button-toggle value="active">Active Tasks</mat-button-toggle>
-        <mat-button-toggle value="completed">Completed Tasks</mat-button-toggle>
-      </mat-button-toggle-group>
-
-      <div style="margin-bottom: 0.5rem;">
+      <div style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px;">
         <!-- Board Name Filter -->
-        <div style="display: inline-block; padding: 2px; width: 30%;">
+        <div style="flex: 1; min-width: 200px;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Project</mat-label>
             <mat-select (selectionChange)="applyColumnFilter('boardName', $event.value)">
@@ -162,7 +156,7 @@
           </mat-form-field>
        </div>
         <!-- Person Filter -->
-        <div style="display: inline-block; padding: 2px; width: 30%;">
+        <div style="flex: 1; min-width: 200px;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Person</mat-label>
             <mat-select [(value)]="selectedPerson" (selectionChange)="applyColumnFilter('person', $event.value)">
@@ -174,7 +168,7 @@
           </mat-form-field>
         </div>
         <!-- Status Filter (Multi-Select) -->
-        <div style="display: inline-block; padding: 2px; width: 30%;">
+        <div style="flex: 1; min-width: 200px;">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Status</mat-label>
             <mat-select [(value)]="selectedStatuses" multiple (selectionChange)="applyStatusFilter($event.value)">
@@ -183,6 +177,14 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+        </div>
+
+        <!-- View Toggle -->
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+          <mat-button-toggle-group [value]="currentView" (change)="onViewChange($event)">
+            <mat-button-toggle value="active">Active</mat-button-toggle>
+            <mat-button-toggle value="completed">Completed</mat-button-toggle>
+          </mat-button-toggle-group>
         </div>
       </div>
     
@@ -199,7 +201,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
 
-            <table mat-table [dataSource]="group.dataSource" matSort class="mat-elevation-z2" style="width: 100%;">
+            <table mat-table [dataSource]="group.dataSource" matSort class="mat-elevation-z2" style="width: 100%; margin-top: 0;">
               <!-- Task Name Column -->
               <ng-container matColumnDef="taskName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Task Name</th>
