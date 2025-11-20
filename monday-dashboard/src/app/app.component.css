@@ -78,25 +78,49 @@
   color: #000; /* Black text */
 }
 
-/* Status dropdown styling - clean and compact */
-.status-dropdown {
+/* Status field styling - clean and compact */
+.status-field {
   width: 100%;
-  min-width: 120px;
   font-size: 0.9rem;
-  border: none;
-  background: transparent;
 }
 
-/* Remove underline from mat-select */
+::ng-deep .status-field .mat-mdc-text-field-wrapper {
+  padding: 0 !important;
+}
+
+::ng-deep .status-field .mat-mdc-form-field-flex {
+  padding: 0 8px !important;
+  align-items: center !important;
+}
+
+::ng-deep .status-field .mat-mdc-form-field-infix {
+  padding: 8px 0 !important;
+  min-height: auto !important;
+  border: none !important;
+}
+
+::ng-deep .status-field .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+::ng-deep .status-field .mat-mdc-form-field-underline {
+  display: none !important;
+}
+
+/* Status dropdown */
+.status-dropdown {
+  width: 100%;
+  font-size: 0.9rem;
+}
+
 ::ng-deep .status-dropdown .mat-mdc-select-trigger {
   border: none !important;
 }
 
 ::ng-deep .status-dropdown .mat-mdc-select-value {
-  padding: 2px 4px;
+  padding: 0 !important;
 }
 
-/* Reduce dropdown arrow size */
 ::ng-deep .status-dropdown .mat-mdc-select-arrow-wrapper {
   height: 16px;
   padding-left: 4px;

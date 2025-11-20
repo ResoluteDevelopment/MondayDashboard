@@ -97,7 +97,8 @@ table th, table td {
 
 ::ng-deep .mat-expansion-panel-header {
     padding: 0 16px !important;
-    height: 48px !important; /* Reduced from default 64px */
+    height: 40px !important; /* Compact header height */
+    min-height: 40px !important;
   }
 
 ::ng-deep .mat-expansion-panel {
